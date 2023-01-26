@@ -15,6 +15,11 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <!-- Dependencies version -->
     <junit.version>4.13.1</junit.version>
+    <assertj.swing.version>3.9.2</assertj.swing.version>
+    
+    <sonar.coverage.exclusions>
+		
+	</sonar.coverage.exclusions>
   </properties>
 
   <dependencies>
@@ -24,6 +29,12 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+		<groupId>org.assertj</groupId>
+		<artifactId>assertj-swing-junit</artifactId>
+		<version>${assertj.swing.version}</version>
+		<scope>test</scope>
+	</dependency>
   </dependencies>
   
   <build>
@@ -54,6 +65,11 @@
 			  <plugin>
 				  <artifactId>maven-site-plugin</artifactId>
 				  <version>3.9.1</version>
+			  </plugin>
+			  <plugin>
+				  <groupId>org.sonarsource.scanner.maven</groupId>
+				  <artifactId>sonar-maven-plugin</artifactId>
+				  <version>3.8.0.2131</version>
 			  </plugin>
 		  </plugins>
 	  </pluginManagement>

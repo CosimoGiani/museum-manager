@@ -2,8 +2,12 @@ package com.cosimogiani.museum;
 
 public class App {
 	
-    public String sayHello() {
-        return "Hello";
+    public int app(boolean increase) {
+        int value = 0;
+        if (increase) {
+        	value =+ 1;
+        }
+        return value;
     }
     
 }

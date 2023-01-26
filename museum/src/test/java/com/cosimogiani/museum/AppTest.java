@@ -1,6 +1,6 @@
 package com.cosimogiani.museum;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +15,13 @@ public class AppTest {
 	}
     
 	@Test
-	public void testSayHello() {
-		assertEquals("Hello", app.sayHello());
+	public void testIncrease() {
+		assertThat(app.app(true)).isEqualTo(1);
+	}
+	
+	@Test
+	public void testNoIncrease() {
+		assertThat(app.app(false)).isEqualTo(0);
 	}
 	
 }
