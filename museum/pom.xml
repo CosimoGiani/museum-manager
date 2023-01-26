@@ -16,7 +16,9 @@
     <!-- Dependencies version -->
     <junit.version>4.13.1</junit.version>
     <assertj.swing.version>3.9.2</assertj.swing.version>
-        
+    
+    <sonar.projectKey>default-project</sonar.projectKey>
+    
     <sonar.coverage.exclusions>
 		
 	</sonar.coverage.exclusions>
