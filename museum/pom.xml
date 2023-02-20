@@ -16,6 +16,7 @@
     <!-- Dependencies version -->
     <junit.version>4.13.1</junit.version>
     <assertj.swing.version>3.9.2</assertj.swing.version>
+    <pitest.version>1.7.2</pitest.version>
     
     <sonar.projectKey>default-project</sonar.projectKey>
     
@@ -82,6 +83,17 @@
 				  <artifactId>sonar-maven-plugin</artifactId>
 				  <version>3.9.0.2155</version>
 			  </plugin>
+			  <plugin>
+				  <groupId>org.pitest</groupId>
+				  <artifactId>pitest-maven</artifactId>
+				  <version>${pitest.version}</version>
+				  <configuration>
+					  <mutators>
+						  <mutator>DEFAULTS</mutator>
+					  </mutators>
+					  <mutationThreshold>100</mutationThreshold>
+				  </configuration>
+			  </plugin>
 		  </plugins>
 	  </pluginManagement>
   </build>
@@ -117,6 +129,17 @@
 							  </goals>
 						  </execution>
 					  </executions>
+				  </plugin>
+			  </plugins>
+		  </build>
+	  </profile>
+	  <profile>
+		  <id>pit</id>
+		  <build>
+			  <plugins>
+				  <plugin>
+					  <groupId>org.pitest</groupId>
+					  <artifactId>pitest-maven</artifactId>
 				  </plugin>
 			  </plugins>
 		  </build>
