@@ -1,4 +1,4 @@
-name: CI with Maven, Coveralls and SonarCloud in Linux
+name: CI with Maven, Coveralls, PIT and SonarCloud in Linux
 
 on:
   push:
@@ -48,4 +48,6 @@ jobs:
       if: ${{ always() }}
       with:
         name: reports
-        path: '**/target/site'
+        path: |
+          **/target/site
+          **/target/pit-reports
