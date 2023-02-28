@@ -21,7 +21,7 @@
     <sonar.projectKey>default-project</sonar.projectKey>
     
     <sonar.coverage.exclusions>
-		
+		**/model/*.*,
 	</sonar.coverage.exclusions>
   </properties>
 
@@ -55,6 +55,11 @@
 						  </goals>
 					  </execution>
 				  </executions>
+				  <configuration>
+					  <excludes>
+						  <exclude>**/model/*.*</exclude>
+					  </excludes>
+				  </configuration>
 			  </plugin>
 			  <plugin>
 				  <groupId>org.eluder.coveralls</groupId>
@@ -88,6 +93,9 @@
 				  <artifactId>pitest-maven</artifactId>
 				  <version>${pitest.version}</version>
 				  <configuration>
+					  <excludedClasses>
+						  <param>com.cosimogiani.museum.model.*</param>
+					  </excludedClasses>
 					  <mutators>
 						  <mutator>DEFAULTS</mutator>
 					  </mutators>
