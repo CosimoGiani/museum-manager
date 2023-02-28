@@ -4,11 +4,11 @@ public abstract class BaseEntity {
 	
 	protected String id;
 	
-	public BaseEntity(String id) {
+	protected BaseEntity(String id) {
 		this.id = id;
 	}
 	
-	public BaseEntity() {}
+	protected BaseEntity() {}
 	
 	public String getId() {
 		return id;
