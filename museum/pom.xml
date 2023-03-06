@@ -17,6 +17,7 @@
     <junit.version>4.13.1</junit.version>
     <assertj.swing.version>3.9.2</assertj.swing.version>
     <pitest.version>1.7.2</pitest.version>
+    <mockito.version>4.0.0</mockito.version>
     
     <sonar.projectKey>default-project</sonar.projectKey>
     
@@ -36,6 +37,12 @@
 		<groupId>org.assertj</groupId>
 		<artifactId>assertj-swing-junit</artifactId>
 		<version>${assertj.swing.version}</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.mockito</groupId>
+		<artifactId>mockito-core</artifactId>
+		<version>${mockito.version}</version>
 		<scope>test</scope>
 	</dependency>
   </dependencies>
