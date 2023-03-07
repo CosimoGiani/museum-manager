@@ -29,11 +29,7 @@ public class Controller {
 			view.showWorks(workService.findWorksByArtist(artist));
 		}
 		catch (ArtistException ae) {
-			view.showArtistError("Artist no longer in the database", artist);
-			view.artistRemoved(artist);
-			// If an artist is no longer in the database, then artist's works should be removed from the view
-			// because the museum doesn't exhibit that artist's works anymore
-			view.removeWorksOfArtist(artist);
+			artistDoesNotExistInDatabase(artist);
 		}
 	}
 	
@@ -63,9 +59,7 @@ public class Controller {
 			view.workAdded(work);
 		}
 		catch (ArtistException ae) {
-			view.showArtistError("Artist no longer in the database", work.getArtist());
-			view.artistRemoved(work.getArtist());
-			view.removeWorksOfArtist(work.getArtist());
+			artistDoesNotExistInDatabase(work.getArtist());
 		}
 		catch (WorkException we) {
 			view.showWorkError("This artwork already exists", work);
@@ -78,9 +72,7 @@ public class Controller {
 			view.workRemoved(work);
 		}
 		catch (ArtistException ae) {
-			view.showArtistError("Artist no longer in the database", work.getArtist());
-			view.artistRemoved(work.getArtist());
-			view.removeWorksOfArtist(work.getArtist());
+			artistDoesNotExistInDatabase(work.getArtist());
 		}
 		catch (WorkException we) {
 			view.showWorkError("Artwork no longer in the database", work);
@@ -91,6 +83,14 @@ public class Controller {
 	public void viewInitialization() {
 		allArtists();
 		allWorks();
+	}
+	
+	private void artistDoesNotExistInDatabase(Artist artist) {
+		view.showArtistError("Artist no longer in the database", artist);
+		view.artistRemoved(artist);
+		// If an artist is no longer in the database, then artist's works should be removed from the view
+		// because the museum doesn't exhibit that artist's works anymore
+		view.removeWorksOfArtist(artist);
 	}
 
 }
