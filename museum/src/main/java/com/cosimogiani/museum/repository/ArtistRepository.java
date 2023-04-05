@@ -12,6 +12,6 @@ public interface ArtistRepository {
 	
 	public Artist findArtistById(String id);
 	
-	public Artist deleteArtist(String id);
+	public void deleteArtist(String id);
 
 }

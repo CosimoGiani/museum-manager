@@ -34,7 +34,8 @@ public class ArtistServiceTransactional implements ArtistService {
 						throw new ArtistException("Artist with id " + id + " not found");
 					}
 					workRepository.deleteWorksOfArtist(id);
-					return artistRepository.deleteArtist(id);
+					artistRepository.deleteArtist(id);
+					return null;
 				});
 	}
 
