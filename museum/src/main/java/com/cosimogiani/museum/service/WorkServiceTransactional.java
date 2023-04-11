@@ -12,6 +12,8 @@ public class WorkServiceTransactional implements WorkService {
 	
 	private TransactionManager transactionManager;
 	
+	private static final String ERROR_MESSAGE_ARTIST = "Artist with id %s not found";
+	
 	public WorkServiceTransactional(TransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 	}
@@ -27,7 +29,7 @@ public class WorkServiceTransactional implements WorkService {
 		return transactionManager.doInTransaction(
 				(artistRepository, workRepository) -> {
 					if (artistRepository.findArtistById(artist.getId()) == null) {
-						throw new ArtistException("Artist with id: " + artist.getId() + " not found");
+						throw new ArtistException(String.format(ERROR_MESSAGE_ARTIST, artist.getId()));
 					}
 					return workRepository.findWorksByArtist(artist);
 				});
@@ -38,7 +40,7 @@ public class WorkServiceTransactional implements WorkService {
 		return transactionManager.doInTransaction(
 				(artistRepository, workRepository) -> {
 					if (artistRepository.findArtistById(work.getArtist().getId()) == null) {
-						throw new ArtistException("Artist with id: " + work.getArtist().getId() + " not found");
+						throw new ArtistException(String.format(ERROR_MESSAGE_ARTIST, work.getArtist().getId()));
 					}
 					if (workRepository.findWorkByArtistAndTitle(work.getArtist(), work.getTitle()) != null) {
 						throw new WorkException("Artwork " + work.getTitle() + " of " + work.getArtist() + " is already in the database");
@@ -52,7 +54,7 @@ public class WorkServiceTransactional implements WorkService {
 		transactionManager.doInTransaction(
 				(artistRepository, workRepository) -> {
 					if (artistRepository.findArtistById(work.getArtist().getId()) == null) {
-						throw new ArtistException("Artist with id: " + work.getArtist().getId() + " not found");
+						throw new ArtistException(String.format(ERROR_MESSAGE_ARTIST, work.getArtist().getId()));
 					}
 					if (workRepository.findWorkById(work.getId()) == null) {
 						throw new WorkException("Artwork with id " + work.getId() + " not found");

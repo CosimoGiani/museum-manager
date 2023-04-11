@@ -81,7 +81,7 @@ public class WorkServiceTransactionalTest {
 			fail("Expected an ArtistException to be thrown");
 		}
 		catch (ArtistException ae) {
-			assertThat("Artist with id: " + ARTIST_FIXTURE.getId() + " not found").isEqualTo(ae.getMessage());
+			assertThat("Artist with id " + ARTIST_FIXTURE.getId() + " not found").isEqualTo(ae.getMessage());
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class WorkServiceTransactionalTest {
 			fail("Expected an ArtistException to be thrown");
 		}
 		catch (ArtistException ae) {
-			assertThat("Artist with id: " + ARTIST_FIXTURE.getId() + " not found").isEqualTo(ae.getMessage());
+			assertThat("Artist with id " + ARTIST_FIXTURE.getId() + " not found").isEqualTo(ae.getMessage());
 		}
 	}
 	
@@ -155,7 +155,7 @@ public class WorkServiceTransactionalTest {
 			fail("Expected an ArtistException to be thrown");
 		}
 		catch (ArtistException ae) {
-			assertThat("Artist with id: " + ARTIST_FIXTURE.getId() + " not found").isEqualTo(ae.getMessage());
+			assertThat("Artist with id " + ARTIST_FIXTURE.getId() + " not found").isEqualTo(ae.getMessage());
 		}
 	}
 
