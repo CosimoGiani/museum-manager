@@ -11,7 +11,7 @@ public interface WorkService {
 	
 	public List<Work> findWorksByArtist(Artist artist);
 	
-	public void addWork(Work work);
+	public Work addWork(Work work);
 	
 	public void deleteWork(Work work);
 
