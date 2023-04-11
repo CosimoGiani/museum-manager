@@ -1,7 +1,7 @@
 package com.cosimogiani.museum.view.swing;
 
-//import static org.junit.Assert.*;
-
+import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -35,9 +35,11 @@ public class SwingViewTest extends AssertJSwingJUnitTestCase {
 		closeable.close();
 	}
 
-	@Test
-	public void test() {
-		//fail("Not yet implemented");
+	@Test @GUITest
+	public void testControlsInitialState() {
+		window.label(JLabelMatcher.withText("ARTIST"));
+		window.label(JLabelMatcher.withText("Name"));
+		window.textBox("textArtistName").requireEnabled();
 	}
 
 }
