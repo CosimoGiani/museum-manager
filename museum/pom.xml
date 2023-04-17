@@ -102,7 +102,11 @@
 				  <configuration>
 					  <excludedClasses>
 						  <param>com.cosimogiani.museum.model.*</param>
+						  <param>com.cosimogiani.museum.view.swing.*</param>
 					  </excludedClasses>
+					  <excludedTestClasses>
+						  <param>com.cosimogiani.museum.view.swing.*</param>
+					  </excludedTestClasses>
 					  <mutators>
 						  <mutator>DEFAULTS</mutator>
 					  </mutators>
