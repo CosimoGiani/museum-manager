@@ -1,6 +1,6 @@
 package com.cosimogiani.museum.view.swing;
 
-import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -35,11 +35,33 @@ public class SwingViewTest extends AssertJSwingJUnitTestCase {
 		closeable.close();
 	}
 
-	@Test @GUITest
+	@Test
 	public void testControlsInitialState() {
 		window.label(JLabelMatcher.withText("ARTIST"));
 		window.label(JLabelMatcher.withText("Name"));
 		window.textBox("textArtistName").requireEnabled();
+		window.button(JButtonMatcher.withText("ADD ARTIST")).requireDisabled();
+		window.list("listArtist");
+		window.button(JButtonMatcher.withText("DELETE ARTIST")).requireDisabled();
+		window.label("lblArtistError").requireText(" ");
+		window.label(JLabelMatcher.withText("WORK"));
+		window.textBox("textWorkTitle").requireEnabled();
+		window.button(JButtonMatcher.withText("ADD WORK")).requireDisabled();
+		window.label(JLabelMatcher.withText("Type"));
+		window.comboBox("comboBoxWorkType").requireSelection("---");
+		window.label(JLabelMatcher.withText("Description"));
+		window.textBox("textDescription").requireEnabled();
+		window.list("listWorks");
+		window.button(JButtonMatcher.withText("DELETE WORK")).requireDisabled();
+		window.label("lblWorkError").requireText(" ");
+		window.label(JLabelMatcher.withText("SEARCH"));
+		window.label("infoText1").requireText("Select an artist from the list, then press the");
+		window.label("infoText2").requireText("\"Search\" button to see the works of the selected");
+		window.label("infoText3").requireText("artist and related informations.");
+		window.comboBox("comboBoxSearch");
+		window.button(JButtonMatcher.withText("SEARCH")).requireDisabled();
+		window.list("listSearch");
+		window.label("lblSearchError").requireText(" ");
 	}
 
 }
