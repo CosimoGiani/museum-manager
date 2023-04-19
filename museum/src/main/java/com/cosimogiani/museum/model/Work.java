@@ -85,7 +85,7 @@ public class Work extends BaseEntity {
 	
 	@Override
 	public String toString() {
-		return title;
+		return title + " - " + type + " - " + description;
 	}
 
 }

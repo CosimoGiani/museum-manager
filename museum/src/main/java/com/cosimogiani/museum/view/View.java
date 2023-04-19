@@ -11,6 +11,8 @@ public interface View {
 	
 	public void showWorks(List<Work> works);
 	
+	public void showWorksInSearchList(List<Work> works);
+	
 	public void artistAdded(Artist artist);
 	
 	public void artistRemoved(Artist artist);
@@ -24,5 +26,7 @@ public interface View {
 	public void workRemoved(Work work);
 	
 	public void showWorkError(String message, Work work);
+	
+	public void showSearchError(String message, Artist artist);
 
 }

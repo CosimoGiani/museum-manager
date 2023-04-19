@@ -1,15 +1,20 @@
 package com.cosimogiani.museum.view.swing;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.SystemColor;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,12 +28,16 @@ import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import com.cosimogiani.museum.controller.Controller;
 import com.cosimogiani.museum.model.Artist;
 import com.cosimogiani.museum.model.Work;
+import com.cosimogiani.museum.view.View;
 
-public class SwingView extends JFrame {
+public class SwingView extends JFrame implements View {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private Controller controller;
 	
 	private JList<Artist> listArtist;
 	private DefaultListModel<Artist> artistListModel;
@@ -61,9 +70,14 @@ public class SwingView extends JFrame {
 	private JButton btnSearch;
 
 	private JLabel labelSearchError;
+	
+	public void setController(Controller controller) {
+		this.controller = controller;
+	}
 
 	/**
 	 * Launch the application.
+	 * 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -134,6 +148,12 @@ public class SwingView extends JFrame {
 		panelArtist.add(lblArtistName, gbc_lblArtistName);
 		
 		textArtistName = new JTextField();
+		textArtistName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnArtistAdd.setEnabled(!textArtistName.getText().trim().isEmpty());
+			}
+		});
 		GridBagConstraints gbc_textArtistName = new GridBagConstraints();
 		gbc_textArtistName.insets = new Insets(0, 0, 5, 5);
 		gbc_textArtistName.fill = GridBagConstraints.BOTH;
@@ -144,6 +164,7 @@ public class SwingView extends JFrame {
 		textArtistName.setColumns(10);
 		
 		btnArtistAdd = new JButton("ADD ARTIST");
+		btnArtistAdd.addActionListener(e -> controller.newArtist(new Artist(textArtistName.getText())));
 		btnArtistAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnArtistAdd.setEnabled(false);
 		GridBagConstraints gbc_btnArtistAdd = new GridBagConstraints();
@@ -165,11 +186,14 @@ public class SwingView extends JFrame {
 		
 		artistListModel = new DefaultListModel<Artist>();
 		listArtist = new JList<>(artistListModel);
+		listArtist.addListSelectionListener(e -> btnArtistDelete.setEnabled(listArtist.getSelectedIndex() != -1));
 		listArtist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listArtist.setName("listArtist");
 		scrollPaneArtist.setViewportView(listArtist);
+		listArtist.addListSelectionListener(e -> addWorkButtonEnabler());
 		
 		btnArtistDelete = new JButton("DELETE ARTIST");
+		btnArtistDelete.addActionListener(e -> controller.deleteArtist(listArtist.getSelectedValue()));
 		btnArtistDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnArtistDelete.setEnabled(false);
 		GridBagConstraints gbc_btnArtistDelete = new GridBagConstraints();
@@ -242,6 +266,7 @@ public class SwingView extends JFrame {
 		comboBoxSearchModel = new DefaultComboBoxModel<>();
 		comboBoxSearch = new JComboBox<>(comboBoxSearchModel);
 		comboBoxSearch.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		comboBoxSearch.addActionListener(e -> btnSearch.setEnabled(comboBoxSearchModel.getSize() != 0));
 		comboBoxSearch.setBackground(SystemColor.text);
 		GridBagConstraints gbc_comboBoxSearch = new GridBagConstraints();
 		gbc_comboBoxSearch.insets = new Insets(0, 0, 5, 5);
@@ -253,12 +278,14 @@ public class SwingView extends JFrame {
 		
 		btnSearch = new JButton("SEARCH");
 		btnSearch.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnSearch.addActionListener(e -> controller.allWorksByArtist((Artist)comboBoxSearch.getSelectedItem()));
 		btnSearch.setEnabled(false);
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.anchor = GridBagConstraints.NORTH;
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSearch.gridx = 1;
 		gbc_btnSearch.gridy = 9;
+		btnSearch.setName("btnSearch");
 		panelSearch.add(btnSearch, gbc_btnSearch);
 		
 		JScrollPane scrollPaneSearch = new JScrollPane();
@@ -276,6 +303,14 @@ public class SwingView extends JFrame {
 		listSearch.setSelectionBackground(Color.WHITE);
 		listSearch.setName("listSearch");
 		scrollPaneSearch.setViewportView(listSearch);
+		listSearch.setCellRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, 
+					boolean isSelected, boolean cellHasFocus) {
+				Work work = (Work) value;
+				return super.getListCellRendererComponent(list, getDisplayString(work), index, isSelected, cellHasFocus);
+			}
+		});
 		
 		labelSearchError = new JLabel(" ");
 		labelSearchError.setForeground(Color.RED);
@@ -321,6 +356,13 @@ public class SwingView extends JFrame {
 		panelWork.add(lblWorkTitle, gbc_lblWorkTitle);
 		
 		textWorkTitle = new JTextField();
+		KeyAdapter addBtnWorkEnabler = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				addWorkButtonEnabler();
+			}
+		};
+		textWorkTitle.addKeyListener(addBtnWorkEnabler);
 		GridBagConstraints gbc_textWorkTitle = new GridBagConstraints();
 		gbc_textWorkTitle.insets = new Insets(0, 0, 5, 5);
 		gbc_textWorkTitle.fill = GridBagConstraints.BOTH;
@@ -332,11 +374,16 @@ public class SwingView extends JFrame {
 		
 		btnWorkAdd = new JButton("ADD WORK");
 		btnWorkAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnWorkAdd.addActionListener(
+				e -> controller.newWork(new Work(listArtist.getSelectedValue(), textWorkTitle.getText(),
+					 comboBoxWorkType.getSelectedItem().toString(), textDescription.getText())
+				));
 		btnWorkAdd.setEnabled(false);
 		GridBagConstraints gbc_btnWorkAdd = new GridBagConstraints();
 		gbc_btnWorkAdd.insets = new Insets(0, 0, 5, 5);
 		gbc_btnWorkAdd.gridx = 3;
 		gbc_btnWorkAdd.gridy = 2;
+		btnWorkAdd.setName("btnWorkAdd");
 		panelWork.add(btnWorkAdd, gbc_btnWorkAdd);
 		
 		JLabel lblType = new JLabel("Type");
@@ -366,6 +413,7 @@ public class SwingView extends JFrame {
 		gbc_comboBoxWorkType.gridy = 3;
 		comboBoxWorkType.setName("comboBoxWorkType");
 		panelWork.add(comboBoxWorkType, gbc_comboBoxWorkType);
+		comboBoxWorkType.addActionListener(e -> addWorkButtonEnabler());
 		
 		JLabel lblDescription = new JLabel("Description");
 		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
@@ -385,6 +433,7 @@ public class SwingView extends JFrame {
 		panelWork.add(textDescription, gbc_textDescription);
 		textDescription.setName("textDescription");
 		textDescription.setColumns(10);
+		textDescription.addKeyListener(addBtnWorkEnabler);
 		
 		JScrollPane scrollPaneWork = new JScrollPane();
 		GridBagConstraints gbc_scrollPaneWork = new GridBagConstraints();
@@ -397,18 +446,21 @@ public class SwingView extends JFrame {
 		
 		workListModel = new DefaultListModel<>();
 		listWorks = new JList<>(workListModel);
+		listWorks.addListSelectionListener(e -> btnWorkDelete.setEnabled(listWorks.getSelectedIndex() != -1));
 		listWorks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listWorks.setName("listWorks");
 		scrollPaneWork.setViewportView(listWorks);
 		
 		btnWorkDelete = new JButton("DELETE WORK");
 		btnWorkDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnWorkDelete.addActionListener(e -> controller.deleteWork(listWorks.getSelectedValue()));
 		btnWorkDelete.setEnabled(false);
 		GridBagConstraints gbc_btnWorkDelete = new GridBagConstraints();
 		gbc_btnWorkDelete.insets = new Insets(0, 0, 5, 5);
 		gbc_btnWorkDelete.gridwidth = 3;
 		gbc_btnWorkDelete.gridx = 1;
 		gbc_btnWorkDelete.gridy = 6;
+		btnWorkDelete.setName("btnWorkDelete");
 		panelWork.add(btnWorkDelete, gbc_btnWorkDelete);
 		
 		labelWorkError = new JLabel(" ");
@@ -420,6 +472,142 @@ public class SwingView extends JFrame {
 		gbc_labelWorkError.gridy = 7;
 		labelWorkError.setName("lblWorkError");
 		panelWork.add(labelWorkError, gbc_labelWorkError);
+	}
+	
+	public DefaultListModel<Artist> getArtistListModel() {
+		return artistListModel;
+	}
+	
+	public DefaultComboBoxModel<Artist> getComboBoxSearchModel() {
+		return comboBoxSearchModel;
+	}
+	
+	public DefaultListModel<Work> getWorkListModel() {
+		return workListModel;
+	}
+	
+	public DefaultListModel<Work> getSearchListModel() {
+		return searchListModel;
+	}
+	
+	private String getDisplayString(Work work) {
+		return work.getTitle() + " - " + work.getType() + " - " + work.getDescription();
+	}
+	
+	private void resetNewArtist() {
+		textArtistName.setText("");
+		lblArtistError.setText("");
+		btnArtistAdd.setEnabled(false);
+		labelSearchError.setText("");
+	}
+	
+	private void resetNewWork() {
+		textWorkTitle.setText("");
+		comboBoxWorkType.setSelectedIndex(0);
+		textDescription.setText("");
+		labelWorkError.setText("");
+		btnWorkAdd.setEnabled(false);
+	}
+	
+	private void addWorkButtonEnabler() {
+		btnWorkAdd.setEnabled(
+				listArtist.getSelectedIndex() != -1 &&
+				!textWorkTitle.getText().trim().isEmpty() &&
+				!textDescription.getText().trim().isEmpty() &&
+				comboBoxWorkType.getSelectedItem() != "---"
+		);
+	}
+	
+	private void removeWorksOfArtistFromWorksList(Artist artist) {
+		int count = 0;
+		while (count < workListModel.getSize()) {
+			if (workListModel.get(count).getArtist().equals(artist)) {
+				workListModel.remove(count);
+			}
+			else count++;
+		}
+	}
+	
+	private void removeWorksOfArtistFromSearchList(Artist artist) {
+		int count = 0;
+		while (count < searchListModel.getSize()) {
+			if (searchListModel.get(count).getArtist().equals(artist)) {
+				searchListModel.remove(count);
+			}
+			else count++;
+		}
+	}
+	
+	@Override
+	public void showArtists(List<Artist> artists) {
+		artistListModel.removeAllElements();
+		comboBoxSearchModel.removeAllElements();
+		artists.stream().forEach(artistListModel::addElement);
+		artists.stream().forEach(comboBoxSearchModel::addElement);
+	}
+	
+	@Override
+	public void showWorks(List<Work> works) {
+		workListModel.removeAllElements();
+		works.stream().forEach(workListModel::addElement);
+	}
+	
+	@Override
+	public void showWorksInSearchList(List<Work> works) {
+		searchListModel.removeAllElements();
+		if (comboBoxSearchModel.getSelectedItem() != null) {
+			works.stream().forEach(searchListModel::addElement);
+		}
+	}
+	
+	@Override
+	public void artistAdded(Artist artist) {
+		List<Artist> artists = new ArrayList<>();
+		for (int i = 0; i < artistListModel.getSize(); i++) {
+			artists.add(artistListModel.getElementAt(i));
+		}
+		artists.add(artist);
+		showArtists(artists);
+		resetNewArtist();
+	}
+	
+	@Override
+	public void artistRemoved(Artist artist) {
+		artistListModel.removeElement(artist);
+		comboBoxSearchModel.removeElement(artist);
+	}
+	
+	@Override
+	public void showArtistError(String message, Artist artist) {
+		lblArtistError.setText(message + ": " + artist.getName());
+	}
+	
+	@Override
+	public void workAdded(Work work) {
+		workListModel.addElement(work);
+		resetNewWork();
+	}
+	
+	@Override
+	public void workRemoved(Work work) {
+		workListModel.removeElement(work);
+		searchListModel.removeElement(work);
+	}
+	
+	@Override
+	public void removeWorksOfArtist(Artist artist) {
+		removeWorksOfArtistFromWorksList(artist);
+		removeWorksOfArtistFromSearchList(artist);
+	}
+	
+	@Override
+	public void showWorkError(String message, Work work) {
+		labelWorkError.setText(message + ": " + work.getTitle());
+	}
+	
+	@Override
+	public void showSearchError(String message, Artist artist) {
+		labelSearchError.setText(message + ": " + artist.getName());
 	}
 
 }

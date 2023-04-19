@@ -66,7 +66,7 @@ public class ControllerTest {
 		List<Work> works = Arrays.asList(new Work());
 		when(workService.findWorksByArtist(ARTIST_FIXTURE)).thenReturn(works);
 		controller.allWorksByArtist(ARTIST_FIXTURE);
-		verify(view).showWorks(works);
+		verify(view).showWorksInSearchList(works);
 	}
 	
 	@Test
@@ -81,7 +81,7 @@ public class ControllerTest {
 	public void testWorksByArtistWhenArtistDoesNotExistInDatabase() {
 		when(workService.findWorksByArtist(ARTIST_FIXTURE)).thenThrow(new ArtistException("Artist not found"));
 		controller.allWorksByArtist(ARTIST_FIXTURE);
-		verify(view).showArtistError("Artist no longer in the database", ARTIST_FIXTURE);
+		verify(view).showSearchError("Artist no longer in the database", ARTIST_FIXTURE);
 		verify(view).artistRemoved(ARTIST_FIXTURE);
 		verify(view).removeWorksOfArtist(ARTIST_FIXTURE);
 	}

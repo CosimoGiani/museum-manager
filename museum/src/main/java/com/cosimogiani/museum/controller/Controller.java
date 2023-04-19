@@ -26,10 +26,12 @@ public class Controller {
 	
 	public void allWorksByArtist(Artist artist) {
 		try {
-			view.showWorks(workService.findWorksByArtist(artist));
+			view.showWorksInSearchList(workService.findWorksByArtist(artist));
 		}
 		catch (ArtistException ae) {
-			artistDoesNotExistInDatabase(artist);
+			view.showSearchError("Artist no longer in the database", artist);
+			view.artistRemoved(artist);
+			view.removeWorksOfArtist(artist);
 		}
 	}
 	
