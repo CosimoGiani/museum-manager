@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.cosimogiani.museum.controller.Controller;
@@ -36,8 +37,10 @@ import com.cosimogiani.museum.view.View;
 public class SwingView extends JFrame implements View {
 	
 	private static final long serialVersionUID = 1L;
+	private static final String PASSWORD_FIELD_INACTIVE_FOREGROUND = "PasswordField.inactiveForeground";
+	private static final String SANS_SERIF = "SansSerif";
 	
-	private Controller controller;
+	private transient Controller controller;
 	
 	private JList<Artist> listArtist;
 	private DefaultListModel<Artist> artistListModel;
@@ -66,9 +69,7 @@ public class SwingView extends JFrame implements View {
 	private JLabel lblWorkTitle;
 	private JLabel lblArtistError;
 	private JLabel labelWorkError;
-
 	private JButton btnSearch;
-
 	private JLabel labelSearchError;
 	
 	public void setController(Controller controller) {
@@ -99,7 +100,7 @@ public class SwingView extends JFrame implements View {
 		setBackground(UIManager.getColor("MenuItem.acceleratorForeground"));
 		setResizable(false);
 		setTitle("MUSEUM VIEW");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 868, 737);
 		contentPane = new JPanel();
 		contentPane.setName("MUSEUM VIEW");
@@ -114,7 +115,7 @@ public class SwingView extends JFrame implements View {
 		contentPane.setLayout(gbl_contentPane);
 		
 		JPanel panelArtist = new JPanel();
-		panelArtist.setBackground(UIManager.getColor("PasswordField.inactiveForeground"));
+		panelArtist.setBackground(UIManager.getColor(PASSWORD_FIELD_INACTIVE_FOREGROUND));
 		GridBagConstraints gbc_panelArtist = new GridBagConstraints();
 		gbc_panelArtist.insets = new Insets(0, 0, 5, 5);
 		gbc_panelArtist.fill = GridBagConstraints.BOTH;
@@ -130,7 +131,7 @@ public class SwingView extends JFrame implements View {
 		
 		JLabel lblArtist = new JLabel("ARTIST");
 		lblArtist.setForeground(new Color(178, 34, 34));
-		lblArtist.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblArtist.setFont(new Font(SANS_SERIF, Font.BOLD, 16));
 		GridBagConstraints gbc_lblArtist = new GridBagConstraints();
 		gbc_lblArtist.gridwidth = 3;
 		gbc_lblArtist.insets = new Insets(0, 0, 5, 5);
@@ -184,7 +185,7 @@ public class SwingView extends JFrame implements View {
 		gbc_scrollPaneArtist.gridy = 3;
 		panelArtist.add(scrollPaneArtist, gbc_scrollPaneArtist);
 		
-		artistListModel = new DefaultListModel<Artist>();
+		artistListModel = new DefaultListModel<>();
 		listArtist = new JList<>(artistListModel);
 		listArtist.addListSelectionListener(e -> btnArtistDelete.setEnabled(listArtist.getSelectedIndex() != -1));
 		listArtist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -214,7 +215,7 @@ public class SwingView extends JFrame implements View {
 		panelArtist.add(lblArtistError, gbc_lblArtistError);
 		
 		JPanel panelSearch = new JPanel();
-		panelSearch.setBackground(UIManager.getColor("PasswordField.inactiveForeground"));
+		panelSearch.setBackground(UIManager.getColor(PASSWORD_FIELD_INACTIVE_FOREGROUND));
 		GridBagConstraints gbc_panelSearch = new GridBagConstraints();
 		gbc_panelSearch.gridheight = 2;
 		gbc_panelSearch.insets = new Insets(0, 0, 5, 0);
@@ -231,7 +232,7 @@ public class SwingView extends JFrame implements View {
 		
 		JLabel lblSearch = new JLabel("SEARCH");
 		lblSearch.setForeground(new Color(178, 34, 34));
-		lblSearch.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblSearch.setFont(new Font(SANS_SERIF, Font.BOLD, 16));
 		GridBagConstraints gbc_lblSearch = new GridBagConstraints();
 		gbc_lblSearch.fill = GridBagConstraints.VERTICAL;
 		gbc_lblSearch.insets = new Insets(0, 0, 5, 5);
@@ -296,7 +297,7 @@ public class SwingView extends JFrame implements View {
 		gbc_scrollPaneSearch.gridy = 10;
 		panelSearch.add(scrollPaneSearch, gbc_scrollPaneSearch);
 		
-		searchListModel = new DefaultListModel<Work>();
+		searchListModel = new DefaultListModel<>();
 		listSearch = new JList<>(searchListModel);
 		listSearch.setFocusable(false);
 		listSearch.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -305,6 +306,7 @@ public class SwingView extends JFrame implements View {
 		scrollPaneSearch.setViewportView(listSearch);
 		listSearch.setCellRenderer(new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 1L;
+			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, 
 					boolean isSelected, boolean cellHasFocus) {
 				Work work = (Work) value;
@@ -322,7 +324,7 @@ public class SwingView extends JFrame implements View {
 		panelSearch.add(labelSearchError, gbc_labelSearchError);
 		
 		JPanel panelWork = new JPanel();
-		panelWork.setBackground(UIManager.getColor("PasswordField.inactiveForeground"));
+		panelWork.setBackground(UIManager.getColor(PASSWORD_FIELD_INACTIVE_FOREGROUND));
 		GridBagConstraints gbc_panelWork = new GridBagConstraints();
 		gbc_panelWork.insets = new Insets(0, 0, 0, 5);
 		gbc_panelWork.fill = GridBagConstraints.BOTH;
@@ -338,7 +340,7 @@ public class SwingView extends JFrame implements View {
 		
 		JLabel lblArtwork = new JLabel("WORK");
 		lblArtwork.setForeground(new Color(178, 34, 34));
-		lblArtwork.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblArtwork.setFont(new Font(SANS_SERIF, Font.BOLD, 16));
 		GridBagConstraints gbc_lblArtwork = new GridBagConstraints();
 		gbc_lblArtwork.gridwidth = 3;
 		gbc_lblArtwork.fill = GridBagConstraints.VERTICAL;
@@ -394,7 +396,7 @@ public class SwingView extends JFrame implements View {
 		gbc_lblType.gridy = 3;
 		panelWork.add(lblType, gbc_lblType);
 		
-		comboBoxWorkTypeModel = new DefaultComboBoxModel<String>();
+		comboBoxWorkTypeModel = new DefaultComboBoxModel<>();
 		comboBoxWorkType = new JComboBox<>(comboBoxWorkTypeModel);
 		comboBoxWorkType.setModel(new DefaultComboBoxModel<>(new String[] {
 				"---",

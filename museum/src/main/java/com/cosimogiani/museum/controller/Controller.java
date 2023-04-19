@@ -14,6 +14,8 @@ public class Controller {
 	private ArtistService artistService;
 	private WorkService workService;
 	
+	private static final String ARIST_ERROR = "Artist no longer in the database";
+	
 	public Controller(View view, ArtistService artistService, WorkService workService) {
 		this.view = view;
 		this.artistService = artistService;
@@ -29,7 +31,7 @@ public class Controller {
 			view.showWorksInSearchList(workService.findWorksByArtist(artist));
 		}
 		catch (ArtistException ae) {
-			view.showSearchError("Artist no longer in the database", artist);
+			view.showSearchError(ARIST_ERROR, artist);
 			view.artistRemoved(artist);
 			view.removeWorksOfArtist(artist);
 		}
@@ -49,7 +51,7 @@ public class Controller {
 			artistService.deleteArtist(artist.getId());
 		}
 		catch (ArtistException ae) {
-			view.showArtistError("Artist no longer in the database", artist);
+			view.showArtistError(ARIST_ERROR, artist);
 		}
 		view.artistRemoved(artist);
 		view.removeWorksOfArtist(artist);
@@ -88,7 +90,7 @@ public class Controller {
 	}
 	
 	private void artistDoesNotExistInDatabase(Artist artist) {
-		view.showArtistError("Artist no longer in the database", artist);
+		view.showArtistError(ARIST_ERROR, artist);
 		view.artistRemoved(artist);
 		// If an artist is no longer in the database, then artist's works should be removed from the view
 		// because the museum doesn't exhibit that artist's works anymore

@@ -21,6 +21,24 @@
     
     <sonar.projectKey>default-project</sonar.projectKey>
     
+    <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+    <!-- Disable rule for "Local variable and method parameter names should comply 
+      with a naming convention" in SwingView -->
+    <sonar.issue.ignore.multicriteria.e1.ruleKey>
+		java:S117
+	</sonar.issue.ignore.multicriteria.e1.ruleKey>
+	<sonar.issue.ignore.multicriteria.e1.resourceKey>
+		**/SwingView.java
+	</sonar.issue.ignore.multicriteria.e1.resourceKey>
+	<!-- Disable rule for "Tests should include assertions":
+	  SonarQube is not aware of AssertJ Swing -->
+	<sonar.issue.ignore.multicriteria.e2.ruleKey>
+		java:S2699
+	</sonar.issue.ignore.multicriteria.e2.ruleKey>
+	<sonar.issue.ignore.multicriteria.e2.resourceKey>
+		**/SwingViewTest.java
+	</sonar.issue.ignore.multicriteria.e2.resourceKey>
+	
     <sonar.coverage.exclusions>
 		**/model/*.*,
 	</sonar.coverage.exclusions>
