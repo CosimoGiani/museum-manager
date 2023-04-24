@@ -64,12 +64,11 @@ public class ArtistMongoRepositoryTest {
 	
 	@Test
 	public void testFindAllArtistsWhenDatabaseIsNotEmpty() {
-		Artist artist1 = new Artist("test1");
-		Artist artist2 = new Artist("test2");
-		addTestArtistToDatabase(artist1);
-		addTestArtistToDatabase(artist2);
-		List<Artist> artists = artistRepository.findAllArtists();
-		assertThat(artists).containsExactly(artist1, artist2);
+		String idArtist1 = addTestArtistToDatabase(new Artist("test1"));
+		String idArtist2 = addTestArtistToDatabase(new Artist("test2"));
+		assertThat(artistRepository.findAllArtists()).containsExactly(
+				new Artist(idArtist1, "test1"), 
+				new Artist(idArtist2, "test2"));
 	}
 	
 	@Test
@@ -80,11 +79,10 @@ public class ArtistMongoRepositoryTest {
 	
 	@Test
 	public void testFindArtistByIdFound() {
-		Artist artist = new Artist("test1");
-		String idArtist = addTestArtistToDatabase(artist);
+		String idArtist = addTestArtistToDatabase(new Artist("test1"));
 		addTestArtistToDatabase(new Artist("test2"));
 		Artist artistFound = artistRepository.findArtistById(idArtist);
-		assertThat(artistFound).isEqualTo(artist);
+		assertThat(artistFound).isEqualTo(new Artist(idArtist, "test1"));
 	}
 	
 	@Test
@@ -93,21 +91,24 @@ public class ArtistMongoRepositoryTest {
 		Artist artistAdded = artistRepository.saveArtist(artistToAdd);
 		assertThat(artistAdded).isEqualTo(artistToAdd);
 		assertThat(readAllArtistsFromDatabase()).containsExactly(artistToAdd);
-		
 	}
 	
 	@Test
-	public void testDeleteArtistWhenArtistExistsInDatabase() {
+	public void testDeleteArtist() {
 		Artist artist = new Artist("test");
 		String idArtistToDelete = addTestArtistToDatabase(artist);
 		artistRepository.deleteArtist(idArtistToDelete);
 		assertThat(readAllArtistsFromDatabase()).isEmpty();
 	}
 	
+	@Test 
+	public void testGetArtistCollection() {
+		assertThat(artistRepository.getArtistCollection().getNamespace()).isEqualTo(artistCollection.getNamespace());
+	}
+	
 	private String addTestArtistToDatabase(Artist artistToAdd) {
 		Document artist = new Document().append("name", artistToAdd.getName());
 		artistCollection.insertOne(artist);
-		artistToAdd.setId(artist.get("_id").toString());
 		return artist.get("_id").toString();
 	}
 	

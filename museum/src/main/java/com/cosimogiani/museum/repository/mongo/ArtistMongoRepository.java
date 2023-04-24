@@ -59,5 +59,9 @@ public class ArtistMongoRepository implements ArtistRepository {
 	public void deleteArtist(String id) {
 		artistCollection.deleteOne(session, Filters.eq("_id", new ObjectId(id)));
 	}
+	
+	public MongoCollection<Document> getArtistCollection() {
+		return artistCollection;
+	}
 
 }
