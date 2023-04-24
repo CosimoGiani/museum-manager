@@ -24,6 +24,12 @@ public class WorkMongoRepository implements WorkRepository {
 	private ArtistMongoRepository artistRepository;
 	private ClientSession session;
 	
+	private static final String UNIQUE_ID = "_id";
+	private static final String FIELD_ARTIST = "artist";
+	private static final String FIELD_TITLE = "title";
+	private static final String FIELD_TYPE = "type";
+	private static final String FIELD_DESCRIPTION = "description";
+	
 	public WorkMongoRepository(MongoClient client, ClientSession session, String dbName, String workCollectionName, 
 			ArtistMongoRepository artistRepository) {
 		MongoDatabase db = client.getDatabase(dbName);
@@ -36,32 +42,32 @@ public class WorkMongoRepository implements WorkRepository {
 	}
 	
 	private Work fromDocumentToWork(Document d) {
-		return new Work((d.get("_id").toString()),
-				artistRepository.findArtistById(((DBRef) d.get("artist")).getId().toString()),
-				d.get("title").toString(),
-				d.get("type").toString(),
-				d.get("description").toString());
+		return new Work((d.get(UNIQUE_ID).toString()),
+				artistRepository.findArtistById(((DBRef) d.get(FIELD_ARTIST)).getId().toString()),
+				d.get(FIELD_TITLE).toString(),
+				d.get(FIELD_TYPE).toString(),
+				d.get(FIELD_DESCRIPTION).toString());
 	}
 	
 	@Override
 	public List<Work> findAllWorks() {
 		return StreamSupport
 				.stream(workCollection.find(session).spliterator(), false)
-				.map(d -> fromDocumentToWork(d))
+				.map(this::fromDocumentToWork)
 				.collect(Collectors.toList());
 	}
 	
 	@Override
 	public List<Work> findWorksByArtist(Artist artist) {
 		return StreamSupport
-				.stream(workCollection.find(session, Filters.eq("artist.$id", new ObjectId(artist.getId()))).spliterator(), false)
-				.map(d -> fromDocumentToWork(d))
+				.stream(workCollection.find(session, Filters.eq(FIELD_ARTIST+".$id", new ObjectId(artist.getId()))).spliterator(), false)
+				.map(this::fromDocumentToWork)
 				.collect(Collectors.toList());
 	}
 	
 	@Override
 	public Work findWorkById(String id) {
-		Document d = workCollection.find(session, Filters.eq("_id", new ObjectId(id))).first();
+		Document d = workCollection.find(session, Filters.eq(UNIQUE_ID, new ObjectId(id))).first();
 		if (d != null) {
 			return fromDocumentToWork(d);
 		}
@@ -71,7 +77,7 @@ public class WorkMongoRepository implements WorkRepository {
 	@Override
 	public Work findWorkByArtistAndTitle(Artist artist, String title) {
 		Document d = workCollection.find(session, Filters.and(
-				Filters.eq("artist.$id", new ObjectId(artist.getId())), Filters.eq("title", title))).first();
+				Filters.eq(FIELD_ARTIST+".$id", new ObjectId(artist.getId())), Filters.eq(FIELD_TITLE, title))).first();
 		if (d != null) {
 			return fromDocumentToWork(d);
 		}
@@ -81,24 +87,24 @@ public class WorkMongoRepository implements WorkRepository {
 	@Override
 	public Work saveWork(Work work) {
 		Document newWork = new Document()
-				.append("artist", new DBRef(artistRepository.getArtistCollection().getNamespace().getCollectionName(), 
+				.append(FIELD_ARTIST, new DBRef(artistRepository.getArtistCollection().getNamespace().getCollectionName(), 
 								  new ObjectId(work.getArtist().getId())))
-				.append("title", work.getTitle())
-				.append("type", work.getType())
-				.append("description", work.getDescription());
+				.append(FIELD_TITLE, work.getTitle())
+				.append(FIELD_TYPE, work.getType())
+				.append(FIELD_DESCRIPTION, work.getDescription());
 		workCollection.insertOne(session, newWork);
-		work.setId(newWork.get("_id").toString());
+		work.setId(newWork.get(UNIQUE_ID).toString());
 		return work;
 	} 
 	
 	@Override
 	public void deleteWork(String id) {
-		workCollection.deleteOne(session, Filters.eq("_id", new ObjectId(id)));
+		workCollection.deleteOne(session, Filters.eq(UNIQUE_ID, new ObjectId(id)));
 	}
 	
 	@Override
 	public void deleteWorksOfArtist(String artistId) {
-		workCollection.deleteMany(session, Filters.eq("artist.$id", new ObjectId(artistId)));
+		workCollection.deleteMany(session, Filters.eq(FIELD_ARTIST+".$id", new ObjectId(artistId)));
 	}
 
 }

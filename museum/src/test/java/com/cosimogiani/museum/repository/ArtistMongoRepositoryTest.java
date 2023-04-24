@@ -3,7 +3,6 @@ package com.cosimogiani.museum.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -11,10 +10,9 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 
 import com.cosimogiani.museum.model.Artist;
 import com.cosimogiani.museum.repository.mongo.ArtistMongoRepository;
@@ -27,19 +25,13 @@ public class ArtistMongoRepositoryTest {
 	
 	private static final String MUSEUM_DB_NAME = "museum";
 	private static final String ARTIST_COLLECTION_NAME = "artist";
-	
-	@SuppressWarnings("rawtypes")
+
 	@ClassRule
-	public static final GenericContainer mongo = new GenericContainer("candis/mongo-replica-set:0.0.2").withExposedPorts(27017);
+	public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
 	
 	private MongoClient client;
 	private ArtistMongoRepository artistRepository;
 	private MongoCollection<Document> artistCollection;
-	
-	@BeforeClass
-	public static void init() throws InterruptedException {
-		TimeUnit.MINUTES.sleep(1);
-	}
 	
 	@Before
 	public void setup() {

@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -12,13 +11,12 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 
 import com.cosimogiani.museum.model.Artist;
 import com.cosimogiani.museum.model.Work;
@@ -39,9 +37,8 @@ public class WorkMongoRepositoryTest {
 	private static final Artist ARTIST_FIXTURE_1 = new Artist(new ObjectId().toString(), "test");
 	private static final Artist ARTIST_FIXTURE_2 = new Artist(new ObjectId().toString(), "test2");
 	
-	@SuppressWarnings("rawtypes")
 	@ClassRule
-	public static final GenericContainer mongo = new GenericContainer("candis/mongo-replica-set:0.0.2").withExposedPorts(27017);
+	public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
 	
 	private MongoClient client;
 	private MongoCollection<Document> workCollection;
@@ -52,11 +49,6 @@ public class WorkMongoRepositoryTest {
 	
 	@InjectMocks
 	private WorkMongoRepository workRepository;
-	
-	@BeforeClass
-	public static void init() throws InterruptedException {
-		TimeUnit.MINUTES.sleep(1);
-	}
 	
 	@Before
 	public void setup() {
