@@ -90,6 +90,7 @@ public class ArtistMongoRepositoryTest {
 		Artist artistToAdd = new Artist("test");
 		Artist artistAdded = artistRepository.saveArtist(artistToAdd);
 		assertThat(artistAdded).isEqualTo(artistToAdd);
+		assertThat(artistAdded.getId()).isNotNull();
 		assertThat(readAllArtistsFromDatabase()).containsExactly(artistToAdd);
 	}
 	

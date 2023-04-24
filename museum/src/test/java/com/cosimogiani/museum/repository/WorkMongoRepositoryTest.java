@@ -171,6 +171,7 @@ public class WorkMongoRepositoryTest {
 		when(artistRepository.getArtistCollection()).thenReturn(client.getDatabase(MUSEUM_DB_NAME).getCollection(ARTIST_COLLECTION_NAME));
 		Work workAdded = workRepository.saveWork(workToAdd);
 		assertThat(workAdded).isEqualTo(workToAdd);
+		assertThat(workAdded.getId()).isNotNull();
 		assertThat(readAllWorksFromDatabase()).containsExactly(workToAdd);
 	}
 	
