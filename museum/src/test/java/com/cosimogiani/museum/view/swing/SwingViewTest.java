@@ -358,6 +358,8 @@ public class SwingViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> swingView.getWorkListModel().addElement(work));
 		window.list("listWorks").selectItem(0);
 		window.button("btnWorkDelete").requireEnabled();
+		window.list("listWorks").clearSelection();
+		window.button("btnWorkDelete").requireDisabled();
 	}
 	
 	@Test
