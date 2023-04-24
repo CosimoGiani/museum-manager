@@ -1,5 +1,6 @@
 package com.cosimogiani.museum.repository.mongo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -26,6 +27,9 @@ public class WorkMongoRepository implements WorkRepository {
 	public WorkMongoRepository(MongoClient client, ClientSession session, String dbName, String workCollectionName, 
 			ArtistMongoRepository artistRepository) {
 		MongoDatabase db = client.getDatabase(dbName);
+		if (!db.listCollectionNames().into(new ArrayList<String>()).contains(workCollectionName)) {
+			db.createCollection(workCollectionName);
+		}
 		workCollection = db.getCollection(workCollectionName);
 		this.artistRepository = artistRepository;
 		this.session = session;

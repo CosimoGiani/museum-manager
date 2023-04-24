@@ -195,6 +195,12 @@ public class WorkMongoRepositoryTest {
 		assertThat(works).containsOnly(new Work(ARTIST_FIXTURE_2, "title3", "type3", "description3"));
 	}
 	
+	@Test
+	public void testCreateWorkCollectionWhenCollectionDoesNotExistInDatabase() {
+		workRepository = new WorkMongoRepository(client, client.startSession(), MUSEUM_DB_NAME, "new_collection", artistRepository);
+		assertThat(client.getDatabase(MUSEUM_DB_NAME).listCollectionNames()).contains("new_collection");
+	}
+	
 	private String addTestWorkToDatabase(Work work) {
 		Document workToAdd = new Document()
 				.append("artist", new DBRef(ARTIST_COLLECTION_NAME, new ObjectId(work.getArtist().getId())))

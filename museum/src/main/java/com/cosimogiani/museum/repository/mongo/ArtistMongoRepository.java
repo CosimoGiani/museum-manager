@@ -1,5 +1,6 @@
 package com.cosimogiani.museum.repository.mongo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -22,6 +23,9 @@ public class ArtistMongoRepository implements ArtistRepository {
 	
 	public ArtistMongoRepository(MongoClient client, ClientSession session, String dbName, String artistCollectionName) {
 		MongoDatabase db = client.getDatabase(dbName);
+		if (!db.listCollectionNames().into(new ArrayList<String>()).contains(artistCollectionName)) {
+			db.createCollection(artistCollectionName);
+		}
 		artistCollection = db.getCollection(artistCollectionName);
 		this.session = session;
 	}

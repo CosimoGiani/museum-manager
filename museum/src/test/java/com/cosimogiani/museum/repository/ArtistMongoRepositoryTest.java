@@ -106,6 +106,12 @@ public class ArtistMongoRepositoryTest {
 		assertThat(artistRepository.getArtistCollection().getNamespace()).isEqualTo(artistCollection.getNamespace());
 	}
 	
+	@Test
+	public void testCreateArtistCollectionWhenCollectionDoesNotExistInDatabase() {
+		artistRepository = new ArtistMongoRepository(client, client.startSession(), MUSEUM_DB_NAME, "new_collection");
+		assertThat(client.getDatabase(MUSEUM_DB_NAME).listCollectionNames()).contains("new_collection");
+	}
+	
 	private String addTestArtistToDatabase(Artist artistToAdd) {
 		Document artist = new Document().append("name", artistToAdd.getName());
 		artistCollection.insertOne(artist);
