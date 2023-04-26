@@ -1,8 +1,6 @@
 package com.cosimogiani.museum.transaction;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,16 +45,15 @@ public class TransactionManagerMongoTest {
 	
 	@Before
 	public void setup() {
-		client = spy(new MongoClient(new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))));
+		client = new MongoClient(new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017)));
 		MongoDatabase database = client.getDatabase(MUSEUM_DB_NAME);
 		database.drop();
 		database.createCollection(ARTIST_COLLECTION_NAME);
 		database.createCollection(WORK_COLLECTION_NAME);
 		artistCollection = database.getCollection(ARTIST_COLLECTION_NAME);
 		workCollection = database.getCollection(WORK_COLLECTION_NAME);
-		transactionManager = new TransactionManagerMongo(client, MUSEUM_DB_NAME, ARTIST_COLLECTION_NAME, WORK_COLLECTION_NAME);
 		session = client.startSession();
-		when(client.startSession()).thenReturn(session);
+		transactionManager = new TransactionManagerMongo(client, session, MUSEUM_DB_NAME, ARTIST_COLLECTION_NAME, WORK_COLLECTION_NAME);
 	}
 	
 	@After

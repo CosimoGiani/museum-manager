@@ -21,12 +21,15 @@ public class TransactionManagerMongo implements TransactionManager {
 	private static final Logger LOGGER = Logger.getLogger(TransactionManagerMongo.class.getName());
 	
 	private MongoClient client;
+	private ClientSession session;
 	private String dbName;
 	private String artistCollectionName;
 	private String workCollectionName;
 	
-	public TransactionManagerMongo(MongoClient client, String dbName, String artistCollectionName, String workCollectionName) {
+	public TransactionManagerMongo(MongoClient client, ClientSession session, String dbName, 
+			String artistCollectionName, String workCollectionName) {
 		this.client = client;
+		this.session = session;
 		this.dbName = dbName;
 		this.artistCollectionName = artistCollectionName;
 		this.workCollectionName = workCollectionName;
@@ -34,7 +37,6 @@ public class TransactionManagerMongo implements TransactionManager {
 	
 	@Override
 	public <T> T doInTransaction(TransactionFunction<T> code) {
-		ClientSession session = client.startSession();
 		TransactionOptions tOptions = TransactionOptions.builder()
 				.readPreference(ReadPreference.primary())
 				.readConcern(ReadConcern.LOCAL)
