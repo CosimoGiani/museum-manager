@@ -136,8 +136,7 @@
 								  <port>27017:27017</port>
 							  </ports>
 							  <wait>
-								  <log>waiting for connections on port</log>
-								  <time>45000</time>
+								  <time>30000</time>
 								  <shutdown>5000</shutdown>
 								  <kill>1000</kill>
 								  <exec>
