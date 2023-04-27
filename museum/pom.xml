@@ -225,6 +225,7 @@
 					  </excludedClasses>
 					  <excludedTestClasses>
 						  <param>com.cosimogiani.museum.view.swing.*</param>
+						  <param>**.*IT</param>
 					  </excludedTestClasses>
 					  <mutators>
 						  <mutator>DEFAULTS</mutator>
