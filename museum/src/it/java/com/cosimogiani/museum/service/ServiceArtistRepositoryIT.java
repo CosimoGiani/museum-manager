@@ -59,11 +59,11 @@ public class ServiceArtistRepositoryIT {
 	public void testAddArtist() {
 		Artist artistAdded = artistService.addArtist(ARTIST_FIXTURE_1);
 		Artist artistFound = artistRepository.findArtistById(artistAdded.getId());
-		assertThat(artistFound).isEqualTo(ARTIST_FIXTURE_1);
+		assertThat(artistFound).isEqualTo(artistAdded);
 	}
 	
 	@Test
-	public void testDeleteArtistWhenClientExistsInDatabase() {
+	public void testDeleteArtist() {
 		Artist artistToDelete = artistRepository.saveArtist(ARTIST_FIXTURE_1);
 		artistRepository.saveArtist(ARTIST_FIXTURE_2);
 		artistService.deleteArtist(artistToDelete.getId());
