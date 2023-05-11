@@ -21,7 +21,7 @@
     
     <sonar.projectKey>default-project</sonar.projectKey>
     
-    <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+    <sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
     <!-- Disable rule for "Local variable and method parameter names should comply 
       with a naming convention" in SwingView -->
     <sonar.issue.ignore.multicriteria.e1.ruleKey>
@@ -38,6 +38,14 @@
 	<sonar.issue.ignore.multicriteria.e2.resourceKey>
 		**/SwingViewTest.java
 	</sonar.issue.ignore.multicriteria.e2.resourceKey>
+	<!-- Disable rule for "Tests classes should comply with a naming convention":
+	  for end to end tests classes -->
+	<sonar.issue.ignore.multicriteria.e3.ruleKey>
+		java:S3577
+	</sonar.issue.ignore.multicriteria.e3.ruleKey>
+	<sonar.issue.ignore.multicriteria.e3.resourceKey>
+		**/*E2E.java
+	</sonar.issue.ignore.multicriteria.e3.resourceKey>
 	
     <sonar.coverage.exclusions>
 		**/model/*.*,

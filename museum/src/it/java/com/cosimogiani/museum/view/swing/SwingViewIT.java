@@ -312,6 +312,10 @@ public class SwingViewIT extends AssertJSwingJUnitTestCase {
 		window.label("lblSearchError").requireText("Artist no longer in the database: " + artist2.getName());
 		String[] listSearch = window.list("listSearch").contents();
 		assertThat(listSearch).isEmpty();
+		assertThat(window.list("listArtist").contents()).noneMatch(e -> e.contains(artist2.toString()));
+		assertThat(window.comboBox("comboBoxSearch").contents()).noneMatch(e -> e.contains(artist2.toString()));
+		String[] listWorks = window.list("listWorks").contents();
+		assertThat(listWorks).doesNotContain(work2.toString());
 	}
 
 }
