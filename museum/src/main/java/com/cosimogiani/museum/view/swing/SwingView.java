@@ -76,26 +76,6 @@ public class SwingView extends JFrame implements View {
 		this.controller = controller;
 	}
 
-	/**
-	 * Launch the application.
-	 * 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					SwingView frame = new SwingView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-	
-
-	/**
-	 * Create the frame.
-	 */
 	public SwingView() {
 		setBackground(UIManager.getColor("MenuItem.acceleratorForeground"));
 		setResizable(false);
