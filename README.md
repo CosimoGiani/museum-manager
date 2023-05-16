@@ -50,11 +50,11 @@ When starting the application, it is also possible to specify the following addi
 | --collection-artists-name | Name of the collection of artist in the database |
 | --collection-works-name | Name of the collection of works in the database |
 
-If none of the above parameter is specified, the application will be execu-ted using their default value.
+If none of the above parameter is specified, the application will be executed using their default value.
 
 ### Tests
 To run the tests locally, execute the following command from the project’s root directory:
 ```
 mvn -f museum/pom.xml clean verify -Pjacoco,pit
 ```
-where the jacoco and pit profiles are optional. When enabled they will execute respectively code coverage and mutation testing. By removing them the above command will run only the tests.
+where the `jacoco` and `pit` profiles are optional. When enabled they will execute respectively code coverage and mutation testing. By removing them the above command will run only the tests.
